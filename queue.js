@@ -354,3 +354,100 @@ scheduler.scheduleTask("Generate report", 4, 1);
 
 
 
+class CallCenter {
+    constructor() {
+        this.regularQueue = new Queue();
+        this.premiumQueue = new Queue();
+        this.agents = [];
+        this.callStats = {
+            answered: 0,
+            abandoned: 0,
+            totalWaitTime: 0
+        };
+    }
+    
+    addAgent(name) {
+        this.agents.push({ name, busy: false });
+        console.log(`📞 Agent ${name} added`);
+    }
+    
+    incomingCall(callerType, callerId, issue) {
+        const call = {
+            id: Date.now(),
+            callerId,
+            issue,
+            startTime: Date.now(),
+            type: callerType
+        };
+        
+        if (callerType === "Premium") {
+            this.premiumQueue.enqueue(call);
+            console.log(`⭐ Premium call from ${callerId} - ${issue}`);
+        } else {
+            this.regularQueue.enqueue(call);
+            console.log(`📞 Regular call from ${callerId} - ${issue}`);
+        }
+        
+        this.routeCalls();
+    }
+    
+    routeCalls() {
+        // Find available agent
+        const availableAgent = this.agents.find(agent => !agent.busy);
+        
+        if (!availableAgent) return;
+        
+        // Check premium queue first, then regular
+        let nextCall = null;
+        let queueType = "";
+        
+        if (!this.premiumQueue.isEmpty()) {
+            nextCall = this.premiumQueue.dequeue();
+            queueType = "Premium";
+        } else if (!this.regularQueue.isEmpty()) {
+            nextCall = this.regularQueue.dequeue();
+            queueType = "Regular";
+        } else {
+            return;
+        }
+        
+        // Assign call to agent
+        availableAgent.busy = true;
+        const waitTime = (Date.now() - nextCall.startTime) / 1000;
+        
+        console.log(`\n🎧 Agent ${availableAgent.name} taking ${queueType} call:`);
+        console.log(`   From: ${nextCall.callerId}`);
+        console.log(`   Issue: ${nextCall.issue}`);
+        console.log(`   Wait time: ${waitTime.toFixed(1)} seconds\n`);
+        
+        this.callStats.totalWaitTime += waitTime;
+        
+        // Simulate call duration
+        setTimeout(() => {
+            this.callStats.answered++;
+            console.log(`✅ Call completed: ${nextCall.callerId} (${nextCall.issue})`);
+            availableAgent.busy = false;
+            this.routeCalls(); // Route next call
+        }, 3000);
+    }
+    
+    getStats() {
+        console.log("\n📊 Call Center Statistics:");
+        console.log(`  Answered: ${this.callStats.answered}`);
+        console.log(`  Premium queue: ${this.premiumQueue.size()}`);
+        console.log(`  Regular queue: ${this.regularQueue.size()}`);
+        console.log(`  Active agents: ${this.agents.filter(a => a.busy).length}/${this.agents.length}`);
+        console.log(`  Avg wait time: ${(this.callStats.totalWaitTime / (this.callStats.answered || 1)).toFixed(1)}s\n`);
+    }
+}
+
+const callCenter = new CallCenter();
+callCenter.addAgent("Sarah");
+callCenter.addAgent("Mike");
+
+callCenter.incomingCall("Premium", "Alice", "Account issue");
+callCenter.incomingCall("Regular", "Bob", "Billing question");
+callCenter.incomingCall("Premium", "Charlie", "Technical support");
+callCenter.incomingCall("Regular", "Diana", "General inquiry");
+
+setTimeout(() => callCenter.getStats(), 4000);
