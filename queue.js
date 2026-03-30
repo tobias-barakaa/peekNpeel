@@ -304,3 +304,53 @@ er.treatNext();  // Minor cut last
 
 
 
+
+
+
+
+class TaskScheduler {
+    constructor() {
+        this.tasks = new MinHeapPriorityQueue();
+        this.running = false;
+    }
+    
+    scheduleTask(name, priority, duration) {
+        this.tasks.enqueue({ name, duration, scheduledAt: new Date() }, priority);
+        console.log(`⏰ Scheduled: ${name} (Priority: ${priority}, Duration: ${duration}s)`);
+        this.runTasks();
+    }
+    
+    async runTasks() {
+        if (this.running) return;
+        
+        this.running = true;
+        
+        while (!this.tasks.isEmpty()) {
+            const task = this.tasks.dequeue();
+            console.log(`\n🚀 Running: ${task.name} (Priority: ${task.priority})`);
+            console.log(`⏳ Estimated time: ${task.duration} seconds`);
+            
+            await new Promise(resolve => setTimeout(resolve, task.duration * 1000));
+            console.log(`✅ Completed: ${task.name} at ${new Date().toLocaleTimeString()}`);
+        }
+        
+        console.log("\n✨ All tasks completed!");
+        this.running = false;
+    }
+    
+    viewPending() {
+        console.log("\n📊 Pending Tasks:");
+        this.tasks.heap.forEach((task, index) => {
+            console.log(`  ${index + 1}. ${task.element.name} (Priority: ${task.priority})`);
+        });
+    }
+}
+
+const scheduler = new TaskScheduler();
+scheduler.scheduleTask("Backup database", 2, 3);
+scheduler.scheduleTask("Send emails", 3, 2);
+scheduler.scheduleTask("Critical update", 1, 5);
+scheduler.scheduleTask("Generate report", 4, 1);
+
+
+
