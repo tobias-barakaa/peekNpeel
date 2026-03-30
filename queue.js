@@ -451,3 +451,63 @@ callCenter.incomingCall("Premium", "Charlie", "Technical support");
 callCenter.incomingCall("Regular", "Diana", "General inquiry");
 
 setTimeout(() => callCenter.getStats(), 4000);
+
+
+class VisualQueue {
+    constructor() {
+        this.items = [];
+    }
+    
+    enqueue(value) {
+        this.items.push(value);
+        this.visualize("ENQUEUE", value);
+        return this;
+    }
+    
+    dequeue() {
+        const value = this.items.shift();
+        this.visualize("DEQUEUE", value);
+        return value;
+    }
+    
+    visualize(action, value) {
+        console.log(`\n${action}: ${value || ''}`);
+        
+        if (this.items.length === 0) {
+            console.log("Queue: [Empty]");
+        } else {
+            const maxWidth = 5;
+            console.log("┌" + "─".repeat(this.items.length * (maxWidth + 1) + 1) + "┐");
+            
+            // Display elements
+            let row = "│";
+            for (let i = 0; i < this.items.length; i++) {
+                row += ` ${String(this.items[i]).padEnd(maxWidth)}│`;
+            }
+            console.log(row);
+            
+            // Display arrows
+            let arrows = " ";
+            for (let i = 0; i < this.items.length; i++) {
+                arrows += "↓".padEnd(maxWidth + 1);
+            }
+            console.log(arrows);
+            
+            // Display labels
+            let labels = " ";
+            for (let i = 0; i < this.items.length; i++) {
+                const label = i === 0 ? "Front" : (i === this.items.length - 1 ? "Back" : "");
+                labels += label.padEnd(maxWidth + 1);
+            }
+            console.log(labels);
+            
+            console.log("└" + "─".repeat(this.items.length * (maxWidth + 1) + 1) + "┘");
+        }
+        console.log(`Size: ${this.items.length}\n`);
+    }
+}
+
+const vq = new VisualQueue();
+vq.enqueue(10).enqueue(20).enqueue(30);
+vq.dequeue();
+vq.dequeue();
