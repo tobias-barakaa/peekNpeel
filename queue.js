@@ -1,0 +1,201 @@
+function Queue () {
+    collection = [];
+    this.print = function() {
+        console.log(collection);
+    };
+    this.enqueu = function(element) {
+        collection.push(element);
+    };
+    this.deque = function(element) {
+        return collection.shift();
+    };
+    this.front = function() {
+        return collection[0];
+    };
+    this.size = function() {
+        return collection.length;
+    };
+
+    this.isEmpty = function() {
+        return (collection.length === 0)
+    }
+};
+
+var q = new Queue();
+q.enqueu('a');
+q.enqueu('b');
+q.enqueu('c');
+q.print();
+q.deque();
+q.print();
+console.log(q.front());
+console.log(q.size());
+console.log(q.isEmpty());
+
+
+
+function PriorityQueue () {
+    var collection = [];
+    this.printCollection = function() {
+        (console.log(collection));
+    };
+
+    this.encqueu = function(element) {
+        if(this.isEmpty()) {
+            collection.push(element);
+        } else {
+            var added = false;
+            for(var i = 0; i < collection.length; i++) {
+                if(element[1] < collection[i][1]) {
+                    collectioin.splice(i,0,element);
+                    added = true;
+                    break
+                }
+            };
+            if(!added) {
+                collection.push(element);
+            }
+        }
+    };
+    this.deque = function() {
+        var value = collection.shift();
+        return value[0];
+    };
+    this.front = function() {
+        return collection[0];
+    };
+    this.isEmpty = function() {
+        return (collection.length === 0);
+    };
+}
+
+var pq = new PriorityQueue();
+pq.encqueu(['Beau Carnes', 2])
+
+
+class MinHeapPriorityQueue {
+    constructor() {
+        this.heap = [];
+    }
+    
+    // Helper methods for heap operations
+    getParentIndex(index) {
+        return Math.floor((index - 1) / 2);
+    }
+    
+    getLeftChildIndex(index) {
+        return 2 * index + 1;
+    }
+    
+    getRightChildIndex(index) {
+        return 2 * index + 2;
+    }
+    
+    swap(i, j) {
+        [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+    }
+    
+    // Add element with priority (lower number = higher priority)
+    enqueue(element, priority) {
+        const item = { element, priority };
+        this.heap.push(item);
+        this.heapifyUp();
+    }
+    
+    // Move element up to maintain heap property
+    heapifyUp() {
+        let index = this.heap.length - 1;
+        
+        while (index > 0) {
+            const parentIndex = this.getParentIndex(index);
+            
+            if (this.heap[parentIndex].priority <= this.heap[index].priority) {
+                break;
+            }
+            
+            this.swap(parentIndex, index);
+            index = parentIndex;
+        }
+    }
+    
+    // Remove and return highest priority element (min priority)
+    dequeue() {
+        if (this.isEmpty()) {
+            return "Priority Queue is empty";
+        }
+        
+        const min = this.heap[0];
+        const last = this.heap.pop();
+        
+        if (!this.isEmpty()) {
+            this.heap[0] = last;
+            this.heapifyDown();
+        }
+        
+        return min.element;
+    }
+    
+    // Move element down to maintain heap property
+    heapifyDown() {
+        let index = 0;
+        
+        while (this.getLeftChildIndex(index) < this.heap.length) {
+            let smallerChildIndex = this.getLeftChildIndex(index);
+            const rightChildIndex = this.getRightChildIndex(index);
+            
+            if (rightChildIndex < this.heap.length && 
+                this.heap[rightChildIndex].priority < this.heap[smallerChildIndex].priority) {
+                smallerChildIndex = rightChildIndex;
+            }
+            
+            if (this.heap[index].priority <= this.heap[smallerChildIndex].priority) {
+                break;
+            }
+            
+            this.swap(index, smallerChildIndex);
+            index = smallerChildIndex;
+        }
+    }
+    
+    // View highest priority element
+    front() {
+        if (this.isEmpty()) {
+            return "Priority Queue is empty";
+        }
+        return this.heap[0].element;
+    }
+    
+    isEmpty() {
+        return this.heap.length === 0;
+    }
+    
+    size() {
+        return this.heap.length;
+    }
+    
+    print() {
+        console.log("Heap Priority Queue:");
+        console.log(JSON.stringify(this.heap, null, 2));
+    }
+}
+
+// Example with heap-based priority queue
+const heapPQ = new MinHeapPriorityQueue();
+heapPQ.enqueue("Low priority task", 5);
+heapPQ.enqueue("Urgent task", 1);
+heapPQ.enqueue("Medium task", 3);
+heapPQ.enqueue("Critical task", 0);  // Highest priority
+
+console.log("Dequeue order:");
+while (!heapPQ.isEmpty()) {
+    console.log(`  → ${heapPQ.dequeue()}`);
+}
+// Output:
+// Dequeue order:
+//   → Critical task
+//   → Urgent task
+//   → Medium task
+//   → Low priority task
+
+
+

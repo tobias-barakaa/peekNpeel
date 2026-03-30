@@ -27,7 +27,7 @@ function mySet() {
 
     // this method will remove an element from a set
 
-    this.remove = function(element) {
+    this.delete = function(element) {
         if(this.has(element)) {
             index = collection.indexOf(element);
             collection.splice(index, 1);
@@ -45,7 +45,7 @@ function mySet() {
     // this method will return the union of two sets 
 
     this.union = function(otherSet) {
-        var unionSet = new Set();
+        var unionSet = new mySet();
         var firstSet = this.values();
         var secondSet = otherSet.values();
         firstSet.forEach(function(e) {
@@ -69,7 +69,7 @@ function mySet() {
             }
         });
 
-        return this.interSectionSet;
+        return interSectionSet;
     };
 
     // this method will return teh difference of two sets as a new set 
@@ -95,4 +95,14 @@ function mySet() {
     }
 
 
-}
+};
+
+var setA = new mySet();
+var setB = new mySet();
+setA.add('a');
+setB.add('b');
+setB.add('c');
+setB.add('a');
+setB.add('d');
+console.log(setA.subset(setB));
+console.log(setA.subset(setB).vaues());
