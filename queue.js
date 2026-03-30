@@ -198,4 +198,55 @@ while (!heapPQ.isEmpty()) {
 //   → Low priority task
 
 
+class PrinterQueue {
+    constructor() {
+        this.queue = new Queue();
+        this.printing = false;
+    }
+    
+    addDocument(document, pages) {
+        this.queue.enqueue({ document, pages, timestamp: new Date() });
+        console.log(`📄 Added: "${document}" (${pages} pages)`);
+        this.processQueue();
+    }
+    
+    async processQueue() {
+        if (this.printing) return;
+        
+        if (this.queue.isEmpty()) {
+            console.log("📭 Queue is empty");
+            return;
+        }
+        
+        this.printing = true;
+        const job = this.queue.dequeue();
+        
+        console.log(`🖨️ Printing: "${job.document}" (${job.pages} pages)...`);
+        
+        // Simulate printing time
+        await new Promise(resolve => setTimeout(resolve, job.pages * 1000));
+        
+        console.log(`✅ Completed: "${job.document}"`);
+        this.printing = false;
+        
+        this.processQueue(); // Process next document
+    }
+    
+    viewQueue() {
+        const jobs = this.queue.toArray();
+        console.log("\n📋 Print Queue:");
+        jobs.forEach((job, index) => {
+            console.log(`  ${index + 1}. "${job.document}" (${job.pages} pages)`);
+        });
+        console.log(`Total: ${jobs.length} job(s)\n`);
+    }
+}
+
+const printer = new PrinterQueue();
+printer.addDocument("Report.pdf", 5);
+printer.addDocument("Invoice.docx", 2);
+printer.addDocument("Photo.jpg", 1);
+setTimeout(() => printer.viewQueue(), 500);
+
+
 
