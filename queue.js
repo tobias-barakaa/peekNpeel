@@ -250,3 +250,57 @@ setTimeout(() => printer.viewQueue(), 500);
 
 
 
+class EmergencyRoom {
+    constructor() {
+        this.triage = new PriorityQueue();
+        this.priorities = {
+            "Critical": 1,      // Heart attack, severe trauma
+            "Emergency": 2,     // Chest pain, major fractures
+            "Urgent": 3,        // Severe fever, minor fractures
+            "Semi-urgent": 4,   // Moderate symptoms
+            "Non-urgent": 5     // Minor complaints
+        };
+    }
+    
+    addPatient(name, condition, priorityLevel) {
+        const priority = this.priorities[priorityLevel];
+        this.triage.enqueue({ name, condition, priorityLevel }, priority);
+        console.log(`🏥 Added: ${name} - ${condition} (${priorityLevel})`);
+        this.displayQueue();
+    }
+    
+    treatNext() {
+        if (this.triage.isEmpty()) {
+            console.log("No patients waiting");
+            return;
+        }
+        
+        const patient = this.triage.dequeue();
+        console.log(`\n👨‍⚕️ TREATING: ${patient.name} - ${patient.condition} (${patient.priorityLevel})`);
+        console.log(`Remaining patients: ${this.triage.size()}\n`);
+        this.displayQueue();
+        return patient;
+    }
+    
+    displayQueue() {
+        console.log("\n📋 Waiting List (by priority):");
+        this.triage.items.forEach((item, index) => {
+            console.log(`  ${index + 1}. ${item.element.name} - ${item.element.condition} (Priority: ${item.element.priorityLevel})`);
+        });
+        console.log();
+    }
+}
+
+const er = new EmergencyRoom();
+er.addPatient("John Doe", "Minor cut", "Non-urgent");
+er.addPatient("Jane Smith", "Chest pain", "Emergency");
+er.addPatient("Bob Wilson", "Broken arm", "Urgent");
+er.addPatient("Alice Brown", "Heart attack", "Critical");
+
+er.treatNext();  // Heart attack patient first
+er.treatNext();  // Chest pain next
+er.treatNext();  // Broken arm
+er.treatNext();  // Minor cut last
+
+
+
