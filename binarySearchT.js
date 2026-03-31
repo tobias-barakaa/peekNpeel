@@ -9,7 +9,7 @@ class Node {
 class BST {
     constructor(value) {
         this.root = new Node(value)
-        this.count = 0;
+        this.count = 1;
     };
 
     size() {
@@ -19,7 +19,6 @@ class BST {
 
     insert(value) {
         this.count++;
-
         let newNode = new Node(value);
         const searchTree = node => {
             // if value < node.value go left 
@@ -225,3 +224,6 @@ console.log(bst.dfsPostOrder());
 
 
 console.log(bst.bfs());
+
+
+
