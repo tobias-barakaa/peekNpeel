@@ -14,7 +14,6 @@ class HashTable {
 
 
 
-
     resize = () => {
         const newTable = new Array(this.table.length * 2);
         this.table.forEach(item => {
