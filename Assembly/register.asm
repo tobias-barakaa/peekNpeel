@@ -27,6 +27,29 @@ mov rax, 0xf4f4f4f4f4ffffffff
 ; AX, CX, DX, BX
 ; CX (CH | CL) ; 16 bits  ECX(32 BITS) RCX(64 BITS)
 ; AX (AX | AL) ; 16 bits  EAX(32 BITS) RAX(64 BITS)
-; DX ( DH | DL)
-; BX (BH | BL)
+; DX ( DH | DL) ; 16 bits EBX(32 BITS ) RDX (64 BITS)
+; BX (BH | BL)  ; 16 bits EBX (32 BITS) RBX(64 BITS)
+
+; GENERAL PURPOSE REGISTERS
+; RAX EAX AX AH AL = Mathematical operations,e.e division, multiplication ...
+; RCX ECX CX CH CL = Counting (loops)
+; RDX EDX DX DH DL = Data I/O in and out ins
+; RBX EBX BX BH BL = Expects a calling convention where we push and pop the registers
+
+; Stack pointer
+; RSP(64 bit) ESP(32 bit), AND SP(16 bit)
+; Points to anywhere in memory
+; push instruction called decrements by one word
+; pop instruction called increments by one word
+
+; RBP (64 bit), EBP(32 bit), and BP(16 bit)
+; Points to an old stack pointer.
+; Can also relatively address on stack
+
+; RDI register == used to store the address where we might move a large chunk of data
+; RDI(64 BIT) EDI(32 BIT) (DI 16 BIT)
+; for output
+
+; RSI (64 bit) ESI(32 bit) (SI 16 bits ===>>>> input address
+; used for string or data copying instructions for input
 
