@@ -16,6 +16,8 @@ _start:
      mov rdx, 12         ; 12 bytes to write to stdout
      syscall
 
+     jmp _start ; assembly 
+
      ; exit(0)
      mov rax, 60   ; system_exit
      xor rdi, rdi ; status 0
